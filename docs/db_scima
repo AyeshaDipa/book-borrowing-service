@@ -1,0 +1,60 @@
+CREATE DATABASE IF NOT EXISTS book_borrowing_service;
+
+USE book_borrowing_service;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    isbn VARCHAR(50) UNIQUE NOT NULL,
+    total_copies INT NOT NULL,
+    available_copies INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE borrow_records (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    borrow_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    due_date DATE,
+    return_date TIMESTAMP NULL,
+    status ENUM('Borrowed','Returned')
+    DEFAULT 'Borrowed',
+
+    FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE,
+
+    FOREIGN KEY (book_id)
+    REFERENCES books(id)
+    ON DELETE CASCADE
+);
+
+
+INSERT INTO books
+(title,author,isbn,total_copies,available_copies)
+VALUES
+
+('JavaScript Basics','John Doe','978111111',10,10),
+
+('Python Programming','Mark Smith','978222222',8,8),
+
+('Harry Potter','J.K. Rowling','111111111',10,10),
+
+('Rich Dad Poor Dad','Robert Kiyosaki','222222222',5,5),
+
+('Clean Code','Robert C. Martin','333333333',5,5),
+
+('The Alchemist','Paulo Coelho','444444444',6,6),
+
+('Think and Grow Rich','Napoleon Hill','555555555',7,7);
+
